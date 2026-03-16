@@ -1,0 +1,188 @@
+@font-face {
+  font-family: "Satoshi";
+  src: url("/assets/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+
+    /* Dark financial theme */
+    --background: 0.12 0.008 255;
+    --foreground: 0.92 0.01 255;
+    --card: 0.16 0.01 255;
+    --card-foreground: 0.92 0.01 255;
+    --popover: 0.15 0.01 255;
+    --popover-foreground: 0.92 0.01 255;
+
+    /* Primary: Emerald green for buy/gain */
+    --primary: 0.72 0.17 162;
+    --primary-foreground: 0.1 0.01 255;
+
+    /* Secondary: Slate */
+    --secondary: 0.22 0.015 255;
+    --secondary-foreground: 0.75 0.015 255;
+
+    --muted: 0.2 0.01 255;
+    --muted-foreground: 0.52 0.02 255;
+
+    --accent: 0.22 0.015 255;
+    --accent-foreground: 0.92 0.01 255;
+
+    /* Destructive: Crimson red for sell/loss */
+    --destructive: 0.62 0.22 25;
+    --destructive-foreground: 0.98 0.01 255;
+
+    --border: 0.22 0.012 255;
+    --input: 0.2 0.012 255;
+    --ring: 0.72 0.17 162;
+
+    --radius: 6px;
+
+    /* Trading-specific tokens */
+    --gain: 0.72 0.17 162;
+    --loss: 0.62 0.22 25;
+    --gain-bg: 0.18 0.05 162;
+    --loss-bg: 0.18 0.05 25;
+    --gain-subtle: 0.2 0.04 162;
+    --loss-subtle: 0.2 0.04 25;
+
+    /* Charts */
+    --chart-1: 0.72 0.17 162;
+    --chart-2: 0.62 0.22 25;
+    --chart-3: 0.65 0.18 230;
+    --chart-4: 0.72 0.16 55;
+    --chart-5: 0.68 0.16 300;
+
+    /* Sidebar */
+    --sidebar: 0.1 0.008 255;
+    --sidebar-foreground: 0.85 0.012 255;
+    --sidebar-primary: 0.72 0.17 162;
+    --sidebar-primary-foreground: 0.1 0.01 255;
+    --sidebar-accent: 0.18 0.012 255;
+    --sidebar-accent-foreground: 0.92 0.01 255;
+    --sidebar-border: 0.18 0.01 255;
+    --sidebar-ring: 0.72 0.17 162;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .font-mono,
+  .tabular-nums {
+    font-feature-settings: "tnum" 1, "kern" 0;
+  }
+}
+
+@layer utilities {
+  .text-gain {
+    color: oklch(var(--gain));
+  }
+  .text-loss {
+    color: oklch(var(--loss));
+  }
+  .bg-gain {
+    background-color: oklch(var(--gain));
+  }
+  .bg-loss {
+    background-color: oklch(var(--loss));
+  }
+  .bg-gain-subtle {
+    background-color: oklch(var(--gain-subtle));
+  }
+  .bg-loss-subtle {
+    background-color: oklch(var(--loss-subtle));
+  }
+  .border-gain {
+    border-color: oklch(var(--gain));
+  }
+  .border-loss {
+    border-color: oklch(var(--loss));
+  }
+
+  /* Price flash animations */
+  @keyframes flash-gain {
+    0% {
+      background-color: oklch(var(--gain-bg));
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  @keyframes flash-loss {
+    0% {
+      background-color: oklch(var(--loss-bg));
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  .flash-gain {
+    animation: flash-gain 0.8s ease-out;
+  }
+  .flash-loss {
+    animation: flash-loss 0.8s ease-out;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: oklch(var(--border));
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--muted-foreground));
+  }
+
+  /* Noise texture overlay */
+  .noise-bg {
+    position: relative;
+  }
+  .noise-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+}
